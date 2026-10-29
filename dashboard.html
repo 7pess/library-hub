@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | LibraryHub</title>
+  <link rel="icon" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="app-page">
+
+<div class="scrim" id="scrim"></div>
+
+<!-- ================= Sidebar ================= -->
+<aside class="sidebar" id="sidebar">
+  <div class="side-brand">
+    <img src="logo.png" alt="">
+    <div><b>Library<span>Hub</span></b><small>D. Y. Patil Varale</small></div>
+  </div>
+
+  <nav class="nav" id="nav">
+    <a href="#overview" data-view="overview">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      Overview
+    </a>
+    <a href="#catalogue" data-view="catalogue">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      Book Catalogue
+    </a>
+    <a href="#issued" data-view="issued">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span id="issuedNavLabel">My Books</span><em class="pill" id="issuedCount" hidden>0</em>
+    </a>
+    <a href="#add" data-view="add" data-faculty="1" hidden>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      Add New Book
+    </a>
+  </nav>
+
+  <div class="side-card">
+    <p class="sc-title">Library timings</p>
+    <p>Mon &ndash; Sat<br><b>9:00 AM &ndash; 6:00 PM</b></p>
+    <p class="sc-note">Sunday closed</p>
+  </div>
+
+  <button class="logout" id="logoutBtn">
+    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+    Log out
+  </button>
+</aside>
+
+<!-- ================= Main ================= -->
+<div class="main">
+  <header class="topbar">
+    <button class="burger" id="burger" aria-label="Open menu">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <div class="top-title">
+      <h1 id="pageTitle">Overview</h1>
+      <p id="today"></p>
+    </div>
+    <label class="top-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="globalSearch" type="search" placeholder="Search books, authors..." autocomplete="off">
+    </label>
+    <div class="me">
+      <div class="avatar" id="avatar">U</div>
+      <div class="me-text"><b id="meName">User</b><small id="meRole">Student</small></div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- ===== OVERVIEW ===== -->
+    <section class="view" id="view-overview">
+      <div class="hero">
+        <div>
+          <p class="hero-hi" id="heroHi">Hello!</p>
+          <h2 id="heroLine">Welcome to the library.</h2>
+          <p class="hero-sub" id="heroSub"></p>
+          <div class="hero-actions">
+            <button class="btn gold" data-go="catalogue">Browse books</button>
+            <button class="btn ghost-light" data-go="issued" id="heroSecond">My books</button>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="b b1"></div><div class="b b2"></div><div class="b b3"></div><div class="b b4"></div>
+        </div>
+      </div>
+
+      <div class="stats" id="stats"></div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Books by category</h3><span class="muted" id="catTotal"></span></div>
+          <div class="bars" id="catBars"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 id="dueTitle">Due soon</h3><a class="link" href="#issued">View all</a></div>
+          <ul class="list" id="dueList"></ul>
+        </div>
+      </div>
+
+      <div class="grid-2 wide-left">
+        <div class="card">
+          <div class="card-head"><h3>New arrivals</h3><a class="link" href="#catalogue">See catalogue</a></div>
+          <div class="arrivals" id="arrivals"></div>
+        </div>
+        <div class="card rules">
+          <div class="card-head"><h3>Library rules</h3></div>
+          <ul class="rule-list">
+            <li><b>14 days</b><span>Loan period for students (faculty: 30 days)</span></li>
+            <li><b>3 books</b><span>Maximum a student can hold at a time</span></li>
+            <li><b>Rs. 2 / day</b><span>Late fine for each overdue book</span></li>
+            <li><b>ID card</b><span>Carry your college ID when collecting books</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CATALOGUE ===== -->
+    <section class="view" id="view-catalogue" hidden>
+      <div class="toolbar">
+        <label class="field search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="q" type="search" placeholder="Search by title, author or shelf..." autocomplete="off">
+        </label>
+        <select id="fCat" class="field"><option value="">All categories</option></select>
+        <select id="fAvail" class="field">
+          <option value="">All books</option>
+          <option value="in">Available now</option>
+          <option value="out">All copies issued</option>
+        </select>
+        <select id="fSort" class="field">
+          <option value="title">Sort: Title A-Z</option>
+          <option value="author">Sort: Author A-Z</option>
+          <option value="year">Sort: Newest year</option>
+          <option value="avail">Sort: Most available</option>
+        </select>
+        <div class="seg" id="viewSeg">
+          <button class="on" data-mode="grid" aria-label="Grid view" title="Grid view"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></button>
+          <button data-mode="table" aria-label="List view" title="List view"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></button>
+        </div>
+        <button class="btn outline" id="exportBtn">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>
+          Export CSV
+        </button>
+      </div>
+      <p class="result-line" id="resultLine"></p>
+      <div id="bookArea"></div>
+    </section>
+
+    <!-- ===== ISSUED ===== -->
+    <section class="view" id="view-issued" hidden>
+      <div class="tabs" id="issueTabs">
+        <button class="on" data-tab="active">Currently issued</button>
+        <button data-tab="overdue">Overdue</button>
+        <button data-tab="history">History</button>
+      </div>
+      <div class="card flush">
+        <div class="table-wrap"><table class="tbl" id="issueTable"></table></div>
+        <div class="empty" id="issueEmpty" hidden></div>
+      </div>
+    </section>
+
+    <!-- ===== ADD BOOK (faculty) ===== -->
+    <section class="view" id="view-add" hidden>
+      <div class="card form-card">
+        <div class="card-head"><h3>Add a new book</h3></div>
+        <form id="addForm" class="form-grid" autocomplete="off">
+          <label class="span2">Book title *<input name="title" required maxlength="120" placeholder="e.g. Data Structures Using C++"></label>
+          <label>Author *<input name="author" required maxlength="80" placeholder="e.g. Mark Allen Weiss"></label>
+          <label>Category<input name="category" list="catList" maxlength="40" placeholder="Choose or type"><datalist id="catList"></datalist></label>
+          <label>Year<input name="year" type="number" min="1800" max="2100" value="2024"></label>
+          <label>Number of copies *<input name="copies" type="number" min="1" max="100" value="3" required></label>
+          <label>Shelf / rack<input name="shelf" maxlength="12" placeholder="e.g. CS-B3"></label>
+          <div class="span2 form-actions">
+            <button class="btn primary" type="submit">Add to library</button>
+            <button class="btn outline" type="reset">Clear</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="js/backend.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
